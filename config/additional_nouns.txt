@@ -1,0 +1,16 @@
+material
+farbe
+preis
+hose
+farben
+bh
+stoff
+stoffe
+hosen
+preise
+materialien
+schuh
+schuhe
+artikel
+kleid
+kleider
