@@ -12,9 +12,15 @@ from services.cleaning import replace_umlaute
 
 
 def load_data(filename: Path) -> pd.DataFrame:
-    df = pd.read_csv(filename, encoding="latin-1", sep=";")
-    df.columns = map(str.lower, df.columns)
-    df.styleid = df.styleid.apply(str)
+    df = pd.read_csv(
+        filename,
+        names=["product_id", "text", "rating"],
+        header=0,
+        encoding="latin-1",
+        sep=";",
+    )
+    df.product_id = df.product_id.apply(str)
+    df = df.drop_duplicates(subset=["product_id", "text"])
     return df
 
 

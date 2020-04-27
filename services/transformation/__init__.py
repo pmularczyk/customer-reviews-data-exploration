@@ -12,16 +12,16 @@ from services.utilities import get_sentiment, filter_words
 # NOTE: not really needed
 # or rather only for nicer annotations while plotting
 def reformat_product_ids(df: pd.DataFrame) -> pd.DataFrame:
-    ids = sorted(list(set(df.styleid.values)))
+    ids = sorted(list(set(df.product_id.values)))
     mapping = {ids[i]: "article No.{}".format(i + 1) for i in range(len(ids))}
-    df.styleid = df.styleid.map(mapping)
+    df.product_id = df.product_id.map(mapping)
     return df
 
 
 def get_average_rating_per_id(df: pd.DataFrame) -> pd.DataFrame:
-    avg_rating_per_id = round(df.groupby("styleid").rating.mean(), 2)
+    avg_rating_per_id = round(df.groupby("product_id").rating.mean(), 2)
     avg_rating = avg_rating_per_id.values.tolist()
-    ids = sorted(list(set(df.styleid.values)))
+    ids = sorted(list(set(df.product_id.values)))
     avg_rating_df = pd.DataFrame({"article": ids, "rating": avg_rating})
     return avg_rating_df
 
@@ -42,7 +42,7 @@ def get_sentiment_from_text_df(df: pd.DataFrame, sentiment_words: dict) -> pd.Da
         get_sentiment, args=(sentiment_words,)
     )
     sentiment_df["encoded_score"] = sentiment_df.score.apply(encode_sentiment_scores)
-    sentiment_df = sentiment_df[["styleid", "encoded_score"]]
+    sentiment_df = sentiment_df[["product_id", "encoded_score"]]
     return sentiment_df
 
 
@@ -63,7 +63,7 @@ def get_filtered_text_df(
     filtered_text_df.text = filtered_text_df.tokenized.apply(
         filter_words, args=(stopwords, nouns)
     )
-    filtered_text_df = filtered_text_df[["styleid", "text"]]
+    filtered_text_df = filtered_text_df[["product_id", "text"]]
     return filtered_text_df
 
 

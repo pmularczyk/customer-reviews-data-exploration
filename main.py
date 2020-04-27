@@ -44,20 +44,20 @@ except FileNotFoundError:
 
 
 def save_plot_sentiment_from_text_per_product(sentiment_df: pd.DataFrame) -> None:
-    product_ids = sentiment_df.styleid.unique()
+    product_ids = sentiment_df.product_id.unique()
     for product_id in product_ids:
         title = f"Sentiment from text for product: {product_id}"
         output_path = get_output_path(
             "plots", f"product_{product_id}_sentiment_from_text.png"
         )
-        subset_df = sentiment_df.loc[sentiment_df.styleid == product_id, :]
+        subset_df = sentiment_df.loc[sentiment_df.product_id == product_id, :]
         plot_pie_chart(subset_df.encoded_score, output_path, title)
 
 
 def save_plot_rating_distribution_per_product(df: pd.DataFrame) -> None:
-    product_ids = df.styleid.unique()
+    product_ids = df.product_id.unique()
     for product_id in product_ids:
-        subset_df = df.loc[df.styleid == product_id, :]
+        subset_df = df.loc[df.product_id == product_id, :]
         subset_rating_distribution_df = get_ratings_in_total(subset_df)
         output_path = get_output_path(
             "plots", f"product_{product_id}_rating_distribution.png"
@@ -131,7 +131,7 @@ def main():
 
     # NOTE: STATS: sentiment per product
     grouped_sentiment = (
-        sentiment_df.groupby(["styleid", "encoded_score"])
+        sentiment_df.groupby(["product_id", "encoded_score"])
         .size()
         .reset_index(name="counts")
     )
@@ -225,7 +225,7 @@ def multiprocessed_main():
 
     # NOTE: STATS: sentiment per product
     grouped_sentiment = (
-        sentiment_df.groupby(["styleid", "encoded_score"])
+        sentiment_df.groupby(["product_id", "encoded_score"])
         .size()
         .reset_index(name="counts")
     )
